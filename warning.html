@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚠️ تحذير! ⚠️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #ff0000;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            animation: flicker 0.1s infinite alternate;
+            text-align: center;
+            cursor: default;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        @keyframes flicker {
+            0% { background-color: #000; }
+            100% { background-color: #330000; }
+        }
+
+        .warning {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: shake 0.1s infinite;
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff0000;
+            white-space: pre-line;
+            line-height: 1.5;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(-51%, -51%); }
+            25% { transform: translate(-49%, -51%); }
+            50% { transform: translate(-51%, -49%); }
+            75% { transform: translate(-49%, -49%); }
+            100% { transform: translate(-51%, -51%); }
+        }
+
+        @media (max-width: 768px) {
+            .warning {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .warning {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="warnings" class="warning"></div>
+    <audio id="scarySound" loop>
+        <!-- Add your own scary sound file as scary-sound.mp3 -->
+        <source src="scary-sound.mp3" type="audio/mp3">
+    </audio>
+
+    <script>
+        const WARNING_TEXT = "⚠ WARNING ⚠\nYOUR PHONE IS BEING HACKED...😈😈😈\nRUN BEFORE IT'S TOO LATE!\n\n";
+        const REPEAT_COUNT = 1000; // Reduced for performance
+        
+        const warningsContainer = document.getElementById('warnings');
+        
+        // Try to play scary sound on user interaction
+        function playSound() {
+            const sound = document.getElementById('scarySound');
+            const playPromise = sound.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Auto-play prevented:", error);
+                });
+            }
+        }
+        
+        // Play sound on any user interaction
+        document.addEventListener('click', playSound);
+        document.addEventListener('keydown', playSound);
+        document.addEventListener('touchstart', playSound);
+        
+        // Fill the page with warnings
+        function fillWarnings() {
+            warningsContainer.textContent = WARNING_TEXT.repeat(REPEAT_COUNT);
+        }
+        
+        // Initial fill
+        fillWarnings();
+        
+        // Disable right-click and selection
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
+        
+        // Disable keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Prevent F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            if (e.keyCode === 123 || 
+                (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) ||
+                (e.ctrlKey && e.keyCode === 85)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Make it harder to leave the page
+        window.onbeforeunload = function() {
+            return "Are you sure you want to leave? The consequences could be dire...";
+        };
+        
+        // Randomly change text color sometimes
+        setInterval(() => {
+            if (Math.random() > 0.9) {
+                warningsContainer.style.color = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'][Math.floor(Math.random() * 6)];
+            }
+        }, 100);
+    </script>
+</body>
+</html>
